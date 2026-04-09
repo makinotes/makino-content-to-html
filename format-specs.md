@@ -216,17 +216,9 @@ poster (精华, 1 张)
 | 表格 → | Table slide | 选最关键 6-8 行 |
 | 流程描述 → | Pipeline | 提取步骤名 + 连接关系 |
 
-### 内容金字塔（跨格式复用）
+### 内容金字塔
 
-```
-page (100% 全文)
-  ↓ 提取 ~70%
-slides (要点+论据, 10-20 页)
-  ↓ 选 top 3 最有冲击力的
-poster (精华, 1 张)
-```
-
-如果用户已经做了 slides，再做 poster 时直接从 slides 的 Extraction Plan 选 top 3 slide，不从原文重新提取。
+（同上 Step 6 后的"内容金字塔"段，不重复。SSOT 在 Step 6 之后。）
 
 ### 提取后：内容决定布局
 

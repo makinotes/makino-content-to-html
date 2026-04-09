@@ -205,50 +205,9 @@ accent/icon 顶部
 
 ---
 
-## 10. 20 种内容→布局映射（完整决策树）
+## 10. 内容→布局映射
 
-完整规范见调研报告 `research-2026-04-09-slide-design-content-layout-mapping.md`。以下是速查。
-
-### 决策树
-
-```
-内容是什么？
-├── 流程步骤 ≤5 → 01 Horizontal Process Strip（水平流程条）
-├── 流程步骤 6+ → 02 Vertical Milestone List（垂直里程碑）
-├── 2 选 1 对比 → 03 Two-Panel Split（双面板，47%/47%）
-├── 3 方比较 → 04 Three-Column Comparison（三栏各 32%）
-├── 多维矩阵 → 05 Comparison Table + Callout（表 75% + callout 25%）
-├── KPI 3-6 个 → 06 Metric Grid（大数字 48-72px + 标签 14px）
-├── 1 个大数字 → 07 Hero Stat（80-120px 居中）
-├── 权威引言 → 08 Pull Quote（28-36px italic 居中）
-├── 论点+证据 → 09 Assertion-Evidence（标题=断言 + 图表 70-80%）
-├── 时间线 → 10 Horizontal Timeline（水平轴 + 节点 4-8 个）
-├── 前后对比 → 11 Before-After Split（灰+绿双面板）
-├── 层级关系 → 12 Tree/Pyramid（节点框 80x32px，≤3 级）
-├── 二维评估 → 13 2x2 Matrix（四象限，≤4 项/象限）
-├── 图片+说明 → 14 Split Image-Text（48-55% 图 + 45-52% 文）
-├── 图表主导 → 15 Chart-Dominant（图表 70-80% + callout 标注）
-├── 数据表格 → 16 Annotated Table（表 75% + callout box 25%）
-├── 章节切换 → 17 Full-Bleed Divider（品牌色/图片背景 + 44-64px 标题）
-├── 增减分解 → 18 Waterfall/Bridge（绿=增 红=减 浮动条）
-├── 多角色流程 → 19 Swimlane（泳道 60-80px/道，角色左侧固定）
-└── 视觉冲击 → 20 Full-Bleed Image（高清图 + 遮罩 30-40% + 白色标题）
-```
-
-### 关键布局参数速查
-
-| 布局 | 核心间距 | 字号 |
-|------|---------|------|
-| Process Strip | 步骤等分 18%，箭头 24px | 标签 16-18px bold，说明 13-14px |
-| Two-Panel | 各 47%，间距 6%，推荐侧 accent 边框 3px | 面板标题 20-22px，内容 14-16px |
-| Metric Grid | 等分块 padding 16px，数字到标签 8px | 大数字 48-72px bold，标签 14-16px |
-| Hero Stat | 数字垂直 45%，说明距数字 24-32px | 数字 80-120px bold，说明 20-24px |
-| Pull Quote | 引言区 60-70% 高，左右 10-15% 边距 | 引言 28-36px italic，归属 16-18px |
-| Assertion-Evidence | 标题 20%，图表 75% | 标题 24-28px，callout 16px bold |
-| Timeline | 轴线 3-4px，节点 16-20px 圆点 | 年份 16px bold，说明 13-14px |
-| Before-After | 各 50%，BEFORE 灰/AFTER 绿 | 标签 18px bold，数据 20-28px bold |
-| 2x2 Matrix | 矩阵占 70-75%，条目 ≤4/象限 | 象限标题 14px bold，条目 13-14px |
-| Split Image-Text | 图 48-55%/文 45-52% | 文区标题 20-22px，说明 14-16px |
+完整决策树和参数速查见 `format-specs.md` "提取后：内容决定布局" 段。此处仅列设计层面的通用规则。
 
 ### 通用规则
 
@@ -279,3 +238,9 @@ accent/icon 顶部
 | 图表占比 | 60-70% 内容区 |
 | 图文分割 | 40/60 或 60/40，不要 50/50 |
 | 最小留白 | 15-20% slide 面积 |
+
+---
+
+## References
+
+Design principles synthesized from: Edward Tufte (data-ink ratio), Garr Reynolds (Presentation Zen), Michael Alley (Assertion-Evidence), Nancy Duarte (Resonate), Cole Nussbaumer Knaflic (Storytelling with Data), Robin Williams (Non-Designer's Design Book), Slidev 4px grid system, Beautiful.ai constraint-based design, McKinsey/BCG consulting slide standards.

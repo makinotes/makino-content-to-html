@@ -10,6 +10,7 @@ sub-agent 输出 JSON，渲染引擎输出 HTML。设计规则全锁在渲染引
     "title": "Presentation Title",
     "preset": "midnight-editorial",
     "density": 1.0,
+    "schema": "1.0",
     "fonts": {
       "display": "Instrument Serif",
       "body": "JetBrains Mono"
@@ -23,6 +24,7 @@ sub-agent 输出 JSON，渲染引擎输出 HTML。设计规则全锁在渲染引
 |------|------|------|------|
 | meta.title | string | Y | deck 标题 |
 | meta.preset | string | Y | STYLE_PRESETS.md 中的 8 选 1 |
+| meta.schema | string | N | Schema 版本号（当前 "1.0"），用于引擎兼容性检查 |
 | meta.density | number | Y | 密度系数 D（1.0 / 1.25 / 1.6） |
 | meta.fonts | object | Y | display + body 字体 |
 | slides | array | Y | SlideObject 数组 |
