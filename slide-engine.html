@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide Engine</title>
+<style>
+/* === RESET === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* === PRESET: Midnight Editorial === */
+.preset-midnight-editorial {
+  --bg: #0f1729; --sf: #162040; --sf-el: #243362;
+  --text: #e8e4d8; --dim: #9a9484; --accent: #d4a73a;
+  --accent-dim: rgba(212,167,58,0.1); --accent-rgb: 212,167,58;
+  --bdr: rgba(200,180,140,0.08); --viewport-bg: #080d1a;
+  --font-display: 'Instrument Serif', serif; --font-body: 'JetBrains Mono', monospace;
+}
+.preset-midnight-editorial .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,167,58,0.15) 0%, transparent 70%);
+}
+
+/* === PRESET: Terminal Mono === */
+.preset-terminal-mono {
+  --bg: #0a0e14; --sf: #12161e; --sf-el: #1a1f2a;
+  --text: #c8d6e5; --dim: #5a6a7a; --accent: #50fa7b;
+  --accent-dim: rgba(80,250,123,0.08); --accent-rgb: 80,250,123;
+  --bdr: rgba(80,250,123,0.06); --viewport-bg: #000000;
+  --font-display: 'JetBrains Mono', monospace; --font-body: 'JetBrains Mono', monospace;
+}
+.preset-terminal-mono .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* === PRESET: Bold Signal === */
+.preset-bold-signal {
+  --bg: #1a1a1a; --sf: #2d2d2d; --sf-el: #3a3a3a;
+  --text: #ffffff; --dim: #999999; --accent: #FF5722;
+  --accent-dim: rgba(255,87,34,0.1); --accent-rgb: 255,87,34;
+  --bdr: rgba(255,255,255,0.08); --viewport-bg: #0d0d0d;
+  --font-display: 'Archivo Black', sans-serif; --font-body: 'Space Grotesk', sans-serif;
+}
+.preset-bold-signal .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: linear-gradient(135deg, rgba(255,87,34,0.05) 0%, transparent 50%, rgba(255,87,34,0.03) 100%);
+}
+
+/* === PRESET: Neon Cyber === */
+.preset-neon-cyber {
+  --bg: #0a0f1c; --sf: #111827; --sf-el: #1e293b;
+  --text: #e0e8f0; --dim: #7a8ba0; --accent: #00ffcc;
+  --accent-secondary: #ff00aa;
+  --accent-dim: rgba(0,255,204,0.08); --accent-rgb: 0,255,204;
+  --bdr: rgba(0,255,204,0.06); --viewport-bg: #050810;
+  --font-display: 'Clash Display', sans-serif; --font-body: 'Satoshi', sans-serif;
+}
+.preset-neon-cyber .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 20%, rgba(0,255,204,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 20% 80%, rgba(255,0,170,0.10) 0%, transparent 60%);
+}
+
+/* === PRESET: Warm Signal === */
+.preset-warm-signal {
+  --bg: #faf6f0; --sf: #ffffff; --sf-el: #ffffff;
+  --text: #2c2a25; --dim: #7c756a; --accent: #c2410c;
+  --accent-dim: rgba(194,65,12,0.08); --accent-rgb: 194,65,12;
+  --bdr: rgba(0,0,0,0.06); --viewport-bg: #1a1a1a;
+  --font-display: 'Plus Jakarta Sans', sans-serif; --font-body: 'Azeret Mono', monospace;
+}
+.preset-warm-signal .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(0,0,0,0.015) 40px, rgba(0,0,0,0.015) 41px);
+}
+
+/* === PRESET: Swiss Clean === */
+.preset-swiss-clean {
+  --bg: #ffffff; --sf: #f8f8f8; --sf-el: #ffffff;
+  --text: #111111; --dim: #666666; --accent: #0055ff;
+  --accent-dim: rgba(0,85,255,0.06); --accent-rgb: 0,85,255;
+  --bdr: rgba(0,0,0,0.06); --viewport-bg: #1a1a1a;
+  --font-display: 'DM Sans', sans-serif; --font-body: 'Fira Code', monospace;
+}
+.preset-swiss-clean .slide::after { content: none; }
+
+/* === PRESET: Dark Botanical === */
+.preset-dark-botanical {
+  --bg: #0f0f0f; --sf: #1a1a1a; --sf-el: #252525;
+  --text: #e8e4df; --dim: #9a9590; --accent: #d4a574;
+  --accent-secondary: #e8b4b8;
+  --accent-dim: rgba(212,165,116,0.08); --accent-rgb: 212,165,116;
+  --bdr: rgba(255,255,255,0.06); --viewport-bg: #000000;
+  --font-display: 'Cormorant', serif; --font-body: 'IBM Plex Sans', sans-serif;
+}
+.preset-dark-botanical .slide::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 50% at 70% 30%, rgba(212,165,116,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(232,180,184,0.08) 0%, transparent 60%);
+}
+
+/* === PRESET: Notebook Tabs === */
+.preset-notebook-tabs {
+  --bg: #f8f6f1; --sf: #ffffff; --sf-el: #ffffff;
+  --text: #1a1a1a; --dim: #666666; --accent: #1a1a1a;
+  --accent-dim: rgba(26,26,26,0.06); --accent-rgb: 26,26,26;
+  --bdr: rgba(0,0,0,0.08); --viewport-bg: #2d2d2d;
+  --font-display: 'Bodoni Moda', serif; --font-body: 'DM Sans', sans-serif;
+}
+.preset-notebook-tabs .slide::after { content: none; }
+.preset-notebook-tabs .slide {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+/* === BODY === */
+body {
+  font-family: var(--font-body);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; overflow: hidden;
+  background: var(--viewport-bg, #080d1a);
+}
+
+/* === SLIDE CARD === */
+.slide {
+  width: 1280px; height: 720px;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  border-radius: 6px;
+  overflow: hidden;
+  display: none; flex-direction: column;
+}
+.slide.active { display: flex; }
+.slide > * { position: relative; z-index: 1; }
+
+/* === 5-LAYER STRUCTURE === */
+.slide .hdr {
+  padding: 16px 40px 0; display: flex; align-items: center;
+  justify-content: space-between; flex-shrink: 0;
+}
+.slide .sub {
+  margin: 4px 40px 0; flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.slide .sub::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+.slide .body {
+  padding: 12px 40px 0; flex: 1; display: flex;
+  flex-direction: column; min-height: 0;
+}
+.slide .ft {
+  padding: 8px 40px 12px; flex-shrink: 0;
+}
+
+/* === TYPOGRAPHY (PRESENTATION SCALE) === */
+.slide .hdr h2 {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 800; line-height: 1.2; color: var(--text);
+}
+.slide .hdr .page {
+  font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  color: var(--dim);
+}
+.slide .sub {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--dim);
+}
+.slide .ft {
+  font-size: 11px; letter-spacing: 0.3px; text-align: center;
+  color: var(--dim);
+}
+
+/* === CARD ANTI-FLOAT === */
+.card, .tier, .ba-panel, .col-card, .matrix-q, .code-block {
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+}
+
+/* === TITLE SLIDE === */
+.title-slide {
+  justify-content: center; align-items: center;
+  text-align: center; padding: 36px;
+}
+.title-slide .prompt {
+  font-family: var(--font-body); font-size: 11px;
+  color: var(--dim); margin-bottom: 12px; letter-spacing: 0.5px;
+}
+.title-slide .prompt .cursor {
+  display: inline-block; width: 8px; height: 14px;
+  background: var(--accent); margin-left: 2px;
+  vertical-align: middle; opacity: 0.7;
+}
+.title-slide .tags {
+  display: flex; gap: 6px; justify-content: center; margin-bottom: 14px;
+}
+.title-slide .tags span {
+  font-size: 11px; padding: 2px 8px; border-radius: 3px;
+  color: var(--accent); border: 1px solid rgba(var(--accent-rgb), 0.2);
+  background: var(--accent-dim);
+}
+.title-slide h1 {
+  font-family: var(--font-display); font-size: 48px;
+  font-weight: 800; line-height: 1.15; max-width: 1000px;
+  margin-bottom: 12px; color: var(--text);
+}
+.title-slide .subtitle {
+  font-size: 15px; color: var(--dim); line-height: 1.6;
+}
+.title-slide .meta {
+  font-size: 11px; margin-top: 16px; opacity: 0.4; color: var(--text);
+}
+
+/* === DIVIDER SLIDE === */
+.divider-slide {
+  justify-content: center; align-items: center;
+  text-align: center; padding: 36px; position: relative;
+}
+.divider-slide .section-num {
+  font-family: var(--font-display); font-size: 160px;
+  font-weight: 200; opacity: 0.04; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -60%);
+  color: var(--text);
+}
+.divider-slide .section-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--dim); margin-bottom: 12px;
+}
+.divider-slide h1 {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 800; line-height: 1.2; color: var(--text);
+}
+
+/* === CONTENT (NUMBERED ITEMS) === */
+.body.body-evenly { justify-content: space-evenly; }
+.body.body-center { justify-content: center; }
+.body.body-start { justify-content: flex-start; }
+.ni {
+  display: flex; gap: 16px; margin-bottom: 16px;
+}
+.ni .n {
+  font-family: var(--font-display); font-size: 28px;
+  font-weight: 800; min-width: 36px; opacity: 0.3;
+  line-height: 1.1; color: var(--text);
+}
+.ni .t strong {
+  font-size: 22px; font-weight: 700; color: var(--text);
+  display: block; line-height: 1.4;
+}
+.ni .t p {
+  font-size: 15px; margin: 4px 0 0; line-height: 1.6; color: var(--dim);
+}
+
+/* === DASHBOARD / KPI CARDS === */
+.g2x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.g2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.card {
+  border: 1px solid var(--bdr); border-radius: 10px; padding: 24px 20px;
+  min-height: 80px;
+}
+.card h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.card p { font-size: 15px; color: var(--dim); margin: 0; line-height: 1.6; }
+.card-accent { border-top: 3px solid var(--accent); }
+.kpi-val {
+  font-family: var(--font-display); font-size: 48px;
+  font-weight: 800; color: var(--text); line-height: 1.1;
+}
+.card-accent .kpi-val { color: var(--accent); }
+.kpi-label { font-size: 11px; margin-top: 4px; color: var(--dim); }
+
+/* === TABLE === */
+.table-wrap { width: 100%; }
+.table-wrap table { width: 100%; border-collapse: collapse; }
+.table-wrap th {
+  font-size: 15px; font-weight: 700; padding: 12px 18px;
+  border-bottom: 3px solid var(--accent); text-align: left; color: var(--text);
+}
+.table-wrap td {
+  font-size: 16px; padding: 10px 18px; border-bottom: 1px solid var(--bdr);
+  color: var(--text);
+}
+.table-wrap td.hl { font-weight: 800; color: var(--accent); }
+.table-with-callout { display: grid; grid-template-columns: 75% 25%; gap: 16px; }
+.callout-box {
+  background: var(--accent-dim); border-left: 3px solid var(--accent);
+  border-radius: 8px; padding: 20px 16px; font-size: 16px;
+  font-weight: 700; color: var(--text); align-self: center;
+}
+
+/* === CODE === */
+.code-block {
+  max-width: 90%; border-radius: 10px; padding: 20px 24px;
+  position: relative; align-self: center; min-width: 600px;
+}
+.code-block .filename {
+  position: absolute; top: 8px; right: 12px; font-size: 11px;
+  opacity: 0.4; color: var(--dim);
+}
+.code-block pre {
+  font-family: var(--font-body); font-size: 14px; line-height: 1.5;
+  color: var(--text); white-space: pre-wrap; word-break: break-all;
+}
+
+/* === QUOTE === */
+.quote-slide {
+  justify-content: center; align-items: center;
+  text-align: center; padding: 36px;
+}
+.bq {
+  font-family: var(--font-display); font-size: 28px;
+  font-weight: 500; line-height: 1.5; text-align: center;
+  max-width: 900px; color: var(--text); position: relative;
+}
+.bq::before {
+  content: '\201C'; font-size: 100px; opacity: 0.1; display: block;
+  line-height: 0.3; margin-bottom: 16px; color: var(--accent);
+}
+.attr {
+  font-size: 15px; margin-top: 20px; text-align: center;
+  line-height: 1.6; color: var(--dim);
+}
+
+/* === DIAGRAM (PIPELINE) === */
+.pipeline { display: flex; gap: 6px; align-items: stretch; }
+.pipeline-step {
+  flex: 1; border-top: 2px solid var(--accent); border-radius: 8px;
+  padding: 14px 12px;
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+}
+.pipeline-step .step-num {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 800; opacity: 0.2; margin-bottom: 6px; color: var(--text);
+}
+.pipeline-step h3 {
+  font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text);
+}
+.pipeline-step p { font-size: 12px; color: var(--dim); line-height: 1.4; }
+.pipeline-arrow {
+  display: flex; align-items: center; font-size: 16px;
+  flex-shrink: 0; color: var(--dim); opacity: 0.4;
+}
+
+/* === FULL-BLEED === */
+.full-bleed-slide {
+  padding: 0; position: relative;
+}
+.full-bleed-slide .fb-img {
+  width: 100%; height: 100%; object-fit: cover;
+  position: absolute; inset: 0; opacity: 0.3;
+}
+.full-bleed-slide .fb-content {
+  position: absolute; bottom: 40px; left: 40px; right: 40px; z-index: 1;
+}
+.full-bleed-slide .fb-content h2 {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 800; color: var(--text); margin-bottom: 8px;
+}
+.full-bleed-slide .fb-content p {
+  font-size: 18px; color: var(--dim); line-height: 1.8;
+}
+
+/* === HERO STAT === */
+.hero-stat-body {
+  justify-content: center; align-items: center; text-align: center;
+}
+.hero-stat-body .big {
+  font-family: var(--font-display); font-size: 96px;
+  font-weight: 800; line-height: 1.1; color: var(--accent);
+}
+.hero-stat-body .ctx {
+  font-size: 20px; margin-top: 24px; line-height: 1.6;
+  max-width: 600px; color: var(--dim);
+}
+.hero-stat-body .delta {
+  font-size: 18px; margin-top: 12px; opacity: 0.6; color: var(--text);
+}
+
+/* === TIMELINE === */
+.timeline {
+  position: relative; display: flex; justify-content: space-between;
+  align-items: flex-start; padding: 80px 0 0;
+}
+.tl-line {
+  position: absolute; top: 88px; left: 0; right: 0;
+  height: 3px; background: var(--bdr);
+}
+.tl-node { flex: 1; text-align: center; position: relative; z-index: 1; }
+.tl-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--dim); margin: 0 auto 16px;
+}
+.tl-node.active .tl-dot {
+  width: 20px; height: 20px; background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.2);
+}
+.tl-year { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.tl-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+.tl-desc {
+  font-size: 15px; line-height: 1.5; max-width: 180px;
+  margin: 0 auto; color: var(--dim);
+}
+
+/* === BEFORE-AFTER === */
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.ba-panel {
+  border-radius: 10px; padding: 32px 28px;
+  display: flex; flex-direction: column;
+}
+.ba-panel.before {
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+  border: 1px solid var(--bdr);
+}
+.ba-panel.after {
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid var(--accent);
+}
+.ba-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 16px; color: var(--dim);
+}
+.ba-panel.after .ba-label { color: var(--accent); }
+.ba-stat {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 800; margin-bottom: 16px; color: var(--text);
+}
+.ba-panel.after .ba-stat { color: var(--accent); }
+.ba-panel ul { list-style: none; }
+.ba-panel li {
+  font-size: 15px; line-height: 1.6; margin-bottom: 8px; color: var(--text);
+  padding-left: 16px; position: relative;
+}
+.ba-panel li::before {
+  content: '\2022'; position: absolute; left: 0; color: var(--dim);
+}
+.ba-panel.after li::before { color: var(--accent); }
+
+/* === MATRIX === */
+.matrix-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+}
+.matrix-x-label {
+  text-align: center; font-size: 11px; font-weight: 700;
+  letter-spacing: 1px; margin-bottom: 8px; color: var(--dim);
+  text-transform: uppercase;
+}
+.matrix-axes { position: relative; width: 100%; }
+.matrix-y-label {
+  position: absolute; left: -40px; top: 50%;
+  transform: rotate(-90deg) translateX(-50%);
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: var(--dim); text-transform: uppercase; transform-origin: left center;
+}
+.matrix {
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: 200px 200px; gap: 4px;
+}
+.matrix-q {
+  border-radius: 8px; padding: 20px;
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+}
+.matrix-q h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.matrix-q ul { list-style: none; }
+.matrix-q li { font-size: 14px; line-height: 1.5; margin-bottom: 4px; color: var(--dim); }
+.matrix-q.highlight {
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1px solid var(--accent);
+}
+
+/* === THREE-COLUMN === */
+.g1x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.col-card {
+  border-radius: 10px; padding: 28px 20px;
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+  border: 1px solid var(--bdr); display: flex; flex-direction: column;
+}
+.col-card.recommended { border-color: var(--accent); border-width: 2px; }
+.col-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+.col-card ul { list-style: none; flex: 1; }
+.col-card li { font-size: 15px; line-height: 1.6; margin-bottom: 6px; color: var(--dim); }
+.col-card .col-stat {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 800; margin-top: auto; padding-top: 16px;
+  border-top: 1px solid var(--bdr); color: var(--text);
+}
+.col-card.recommended .col-stat { color: var(--accent); }
+
+/* === SPLIT === */
+.g1x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.split-panel {
+  padding: 20px; border-radius: 10px;
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+  border: 1px solid var(--bdr);
+}
+.split-panel h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+.split-panel ul { list-style: none; }
+.split-panel li { font-size: 15px; line-height: 1.6; margin-bottom: 8px; color: var(--dim); }
+.split-panel img {
+  width: 100%; height: auto; max-height: 380px;
+  object-fit: cover; border-radius: 8px;
+}
+.split-panel .caption { font-size: 11px; color: var(--dim); margin-top: 8px; }
+
+/* === TIER CARD === */
+.tier {
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+  border-radius: 10px; padding: 20px 24px; margin-bottom: 12px;
+  border-left: 4px solid var(--accent);
+}
+.tier .tl-tier { font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px; color: var(--dim); }
+.tier li { font-size: 15px; line-height: 1.6; margin-bottom: 5px; color: var(--text); }
+
+/* === NAV === */
+#nav {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; z-index: 100;
+}
+#nav button {
+  width: 30px; height: 30px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03); color: #555;
+  cursor: pointer; font-size: 13px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+#nav button:hover { background: rgba(255,255,255,0.08); }
+#counter {
+  font-size: 10px; min-width: 50px; text-align: center;
+  color: #555; font-family: var(--font-body);
+}
+
+/* === ACCENT TEXT HELPER === */
+.accent { color: var(--accent); }
+
+/* === FALLBACK ERROR === */
+.slide-error {
+  justify-content: center; align-items: center; text-align: center;
+}
+.slide-error .err-msg {
+  font-size: 18px; color: var(--dim); padding: 40px;
+  background: color-mix(in srgb, var(--bg) 92%, var(--text) 8%);
+  border-radius: 10px; max-width: 600px;
+}
+
+/* === PRINT === */
+@media print {
+  #nav { display: none; }
+  body { background: white; overflow: visible; }
+  .slide {
+    position: relative !important; display: flex !important;
+    page-break-after: always; transform: none !important;
+    top: auto !important; left: auto !important; margin: 20px auto;
+    box-shadow: none; border: 1px solid #ccc;
+  }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<script type="application/json" id="slide-data">
+{
+  "meta": {
+    "title": "Slide Engine Demo",
+    "preset": "midnight-editorial",
+    "density": 1.0,
+    "fonts": {
+      "display": "Instrument Serif",
+      "body": "JetBrains Mono"
+    }
+  },
+  "slides": [
+    {
+      "type": "title",
+      "content": {
+        "heading": "Slide Engine Demo",
+        "subtitle": "A JSON-driven rendering engine for pixel-perfect presentations",
+        "tags": ["Demo", "v1.0"],
+        "meta": "2026-04 \u00b7 Self-contained \u00b7 5 slides"
+      }
+    },
+    {
+      "type": "content",
+      "page": "02",
+      "title": "Four design principles behind this engine",
+      "subtitle": "ARCHITECTURE",
+      "footer": "Source: slide-types.md",
+      "content": {
+        "items": [
+          { "heading": "Fixed 1280x720 canvas", "detail": "No responsive scaling \u2014 pixel-perfect control at presentation scale" },
+          { "heading": "5-layer structure locks layout", "detail": "hdr/sub/body/ft regions with fixed padding eliminate guesswork" },
+          { "heading": "Density coefficient D adjusts spacing only", "detail": "Font sizes never change; padding and gap multiply by 1.0/1.25/1.6" },
+          { "heading": "Card anti-float backgrounds", "detail": "8% color-mix prevents cards from floating in empty space" }
+        ]
+      }
+    },
+    {
+      "type": "dashboard",
+      "page": "03",
+      "title": "Engine capabilities at a glance",
+      "subtitle": "METRICS",
+      "footer": "All values from slide-schema.md spec",
+      "content": {
+        "cards": [
+          { "value": "15", "label": "Slide types supported", "accent": true },
+          { "value": "8", "label": "Style presets available", "accent": false },
+          { "value": "6", "label": "Typography scale levels", "accent": false },
+          { "value": "0", "label": "External dependencies", "accent": false }
+        ]
+      }
+    },
+    {
+      "type": "before-after",
+      "page": "04",
+      "title": "From manual HTML to JSON-driven slides",
+      "subtitle": "WORKFLOW",
+      "footer": "Measured from content-to-html skill usage",
+      "content": {
+        "before": {
+          "label": "BEFORE",
+          "stat": "45 min",
+          "items": ["Hand-code each slide HTML", "Copy-paste CSS per type", "Manual spacing adjustments"]
+        },
+        "after": {
+          "label": "AFTER",
+          "stat": "3 min",
+          "items": ["Write JSON content only", "Engine renders all 15 types", "Preset handles all styling"]
+        }
+      }
+    },
+    {
+      "type": "quote",
+      "content": {
+        "text": "Design is not just what it looks like. Design is how it works.",
+        "attribution": "\u2014 Steve Jobs"
+      }
+    }
+  ]
+}
+</script>
+
+<div id="nav">
+  <button id="prev">&#8592;</button>
+  <span id="counter">01 / 05</span>
+  <button id="next">&#8594;</button>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // --- Parse JSON data ---
+  var dataEl = document.getElementById('slide-data');
+  var data;
+  try {
+    data = JSON.parse(dataEl.textContent);
+  } catch (e) {
+    document.body.innerHTML = '<div style="color:#fff;padding:40px;font-family:monospace;">JSON parse error: ' + e.message + '</div>';
+    return;
+  }
+
+  var meta = data.meta;
+  var slides = data.slides;
+  var D = meta.density || 1.0;
+
+  // --- Density helper: round to nearest 4px grid ---
+  function d(px) {
+    if (D === 1.0) return px + 'px';
+    return (Math.round((px * D) / 4) * 4) + 'px';
+  }
+
+  // --- Apply preset class ---
+  var presetClass = 'preset-' + meta.preset;
+  document.body.classList.add(presetClass);
+
+  // --- Load Google Fonts ---
+  var fontFamilies = [];
+  if (meta.fonts.display) fontFamilies.push(meta.fonts.display.replace(/ /g, '+') + ':wght@200;400;500;600;700;800');
+  if (meta.fonts.body && meta.fonts.body !== meta.fonts.display) {
+    fontFamilies.push(meta.fonts.body.replace(/ /g, '+') + ':wght@300;400;500;600;700');
+  }
+  if (fontFamilies.length) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=' + fontFamilies.join('&family=') + '&display=swap';
+    document.head.appendChild(link);
+  }
+
+  // --- Validation ---
+  var VALID_TYPES = ['title','divider','content','split','dashboard','table','code','quote',
+                     'diagram','full-bleed','hero-stat','timeline','before-after','matrix','three-column'];
+
+  function validate(slide, i) {
+    var warnings = [];
+    if (VALID_TYPES.indexOf(slide.type) === -1) warnings.push('Unknown type: ' + slide.type);
+    if (!slide.content) warnings.push('Missing content object');
+    if (slide.type === 'content' && slide.content && slide.content.items) {
+      if (slide.content.items.length < 3 || slide.content.items.length > 6) warnings.push('Content items should be 3-6, got ' + slide.content.items.length);
+    }
+    if (slide.type === 'dashboard' && slide.content && slide.content.cards) {
+      if (slide.content.cards.length < 3 || slide.content.cards.length > 6) warnings.push('Dashboard cards should be 3-6, got ' + slide.content.cards.length);
+      var accentCount = slide.content.cards.filter(function(c) { return c.accent; }).length;
+      if (accentCount > 1) warnings.push('Dashboard: max 1 accent card, got ' + accentCount);
+    }
+    if (slide.type === 'timeline' && slide.content && slide.content.nodes) {
+      if (slide.content.nodes.length < 4 || slide.content.nodes.length > 8) warnings.push('Timeline nodes should be 4-8, got ' + slide.content.nodes.length);
+    }
+    if (slide.type === 'hero-stat' && slide.content && slide.content.number) {
+      if (!/\d/.test(slide.content.number)) warnings.push('Hero-stat number must contain digits');
+    }
+    if (warnings.length) {
+      warnings.forEach(function(w) { console.warn('Slide ' + (i + 1) + ': ' + w); });
+    }
+    return warnings;
+  }
+
+  // --- Escape HTML ---
+  function esc(s) {
+    if (!s) return '';
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  // --- Parse **bold** markers in table cells ---
+  function parseHL(text) {
+    if (!text) return { html: '', isHL: false };
+    var m = text.match(/^\*\*(.+)\*\*$/);
+    if (m) return { html: esc(m[1]), isHL: true };
+    return { html: esc(text), isHL: false };
+  }
+
+  // --- Build 5-layer wrapper ---
+  function wrap5(slide, bodyHTML, bodyClass) {
+    var cls = bodyClass || 'body-center';
+    var html = '<div class="slide">';
+    // hdr
+    html += '<div class="hdr"><h2>' + esc(slide.title || '') + '</h2>';
+    if (slide.page) html += '<span class="page">' + esc(slide.page) + '</span>';
+    html += '</div>';
+    // sub
+    if (slide.subtitle) html += '<div class="sub">' + esc(slide.subtitle) + '</div>';
+    // body
+    html += '<div class="body ' + cls + '" style="padding-top:' + d(12) + ';">' + bodyHTML + '</div>';
+    // ft
+    if (slide.footer) html += '<div class="ft">' + esc(slide.footer) + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  // --- RENDERERS ---
+
+  function renderTitle(slide) {
+    var c = slide.content;
+    var html = '<div class="slide title-slide">';
+    html += '<div class="prompt">cat deck.json<span class="cursor"></span></div>';
+    if (c.tags && c.tags.length) {
+      html += '<div class="tags">';
+      c.tags.forEach(function(t) { html += '<span>' + esc(t) + '</span>'; });
+      html += '</div>';
+    }
+    html += '<h1>' + esc(c.heading) + '</h1>';
+    if (c.subtitle) html += '<p class="subtitle">' + esc(c.subtitle) + '</p>';
+    if (c.meta) html += '<p class="meta">' + esc(c.meta) + '</p>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderDivider(slide) {
+    var c = slide.content;
+    var html = '<div class="slide divider-slide">';
+    html += '<div class="section-num">' + esc(c.number || '') + '</div>';
+    if (c.section) html += '<div class="section-label">' + esc(c.section) + '</div>';
+    html += '<h1>' + esc(c.heading || '') + '</h1>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderContent(slide) {
+    var c = slide.content;
+    var bodyHTML = '';
+    c.items.forEach(function(item, idx) {
+      var num = String(idx + 1).padStart(2, '0');
+      bodyHTML += '<div class="ni" style="margin-bottom:' + d(16) + ';">';
+      bodyHTML += '<div class="n">' + num + '</div>';
+      bodyHTML += '<div class="t"><strong>' + esc(item.heading) + '</strong>';
+      if (item.detail) bodyHTML += '<p>' + esc(item.detail) + '</p>';
+      bodyHTML += '</div></div>';
+    });
+    return wrap5(slide, bodyHTML, 'body-evenly');
+  }
+
+  function renderSplit(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="g1x2" style="gap:' + d(20) + ';">';
+
+    // Left panel
+    bodyHTML += '<div class="split-panel">';
+    if (c.left.heading) bodyHTML += '<h3>' + esc(c.left.heading) + '</h3>';
+    if (c.left.items && c.left.items.length) {
+      bodyHTML += '<ul>';
+      c.left.items.forEach(function(item) {
+        if (typeof item === 'string') {
+          bodyHTML += '<li>' + esc(item) + '</li>';
+        } else {
+          bodyHTML += '<li><strong style="font-size:15px;font-weight:700;color:var(--text);">' + esc(item.heading) + '</strong>';
+          if (item.detail) bodyHTML += '<br><span style="font-size:14px;color:var(--dim);">' + esc(item.detail) + '</span>';
+          bodyHTML += '</li>';
+        }
+      });
+      bodyHTML += '</ul>';
+    }
+    bodyHTML += '</div>';
+
+    // Right panel
+    bodyHTML += '<div class="split-panel">';
+    if (c.right.variant === 'image' && c.right.image) {
+      bodyHTML += '<img src="' + esc(c.right.image) + '" alt="">';
+      if (c.right.caption) bodyHTML += '<div class="caption">' + esc(c.right.caption) + '</div>';
+    } else {
+      if (c.right.heading) bodyHTML += '<h3>' + esc(c.right.heading) + '</h3>';
+      if (c.right.items && c.right.items.length) {
+        bodyHTML += '<ul>';
+        c.right.items.forEach(function(item) {
+          if (typeof item === 'string') {
+            bodyHTML += '<li>' + esc(item) + '</li>';
+          } else {
+            bodyHTML += '<li><strong style="font-size:15px;font-weight:700;color:var(--text);">' + esc(item.heading) + '</strong>';
+            if (item.detail) bodyHTML += '<br><span style="font-size:14px;color:var(--dim);">' + esc(item.detail) + '</span>';
+            bodyHTML += '</li>';
+          }
+        });
+        bodyHTML += '</ul>';
+      }
+    }
+    bodyHTML += '</div></div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderDashboard(slide) {
+    var c = slide.content;
+    var cols = c.cards.length <= 4 ? 2 : 3;
+    var gridClass = cols === 3 ? 'g2x3' : 'g2x2';
+    var bodyHTML = '<div class="' + gridClass + '" style="gap:' + d(10) + ';">';
+    c.cards.forEach(function(card) {
+      var cls = card.accent ? 'card card-accent' : 'card';
+      bodyHTML += '<div class="' + cls + '" style="padding:' + d(24) + ' ' + d(20) + ';">';
+      bodyHTML += '<div class="kpi-val">' + esc(card.value) + '</div>';
+      bodyHTML += '<div class="kpi-label">' + esc(card.label) + '</div>';
+      bodyHTML += '</div>';
+    });
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderTable(slide) {
+    var c = slide.content;
+    var hasCallout = !!c.callout;
+    var bodyHTML = '';
+    if (hasCallout) bodyHTML += '<div class="table-with-callout">';
+    bodyHTML += '<div class="table-wrap"><table><thead><tr>';
+    c.columns.forEach(function(col) {
+      bodyHTML += '<th>' + esc(col) + '</th>';
+    });
+    bodyHTML += '</tr></thead><tbody>';
+    c.rows.forEach(function(row) {
+      bodyHTML += '<tr>';
+      row.forEach(function(cell) {
+        var parsed = parseHL(cell);
+        bodyHTML += '<td' + (parsed.isHL ? ' class="hl"' : '') + '>' + parsed.html + '</td>';
+      });
+      bodyHTML += '</tr>';
+    });
+    bodyHTML += '</tbody></table></div>';
+    if (hasCallout) {
+      bodyHTML += '<div class="callout-box">' + esc(c.callout) + '</div></div>';
+    }
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderCode(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="code-block">';
+    if (c.filename) bodyHTML += '<div class="filename">' + esc(c.filename) + '</div>';
+    bodyHTML += '<pre>' + esc(c.code) + '</pre>';
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderQuote(slide) {
+    var c = slide.content;
+    var html = '<div class="slide quote-slide">';
+    html += '<div class="bq">' + esc(c.text) + '</div>';
+    if (c.attribution) html += '<div class="attr">' + esc(c.attribution) + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderDiagram(slide) {
+    var c = slide.content;
+    // Only pipeline variant implemented here
+    var bodyHTML = '<div class="pipeline" style="gap:' + d(6) + ';">';
+    c.steps.forEach(function(step, idx) {
+      if (idx > 0) bodyHTML += '<div class="pipeline-arrow">\u2192</div>';
+      bodyHTML += '<div class="pipeline-step" style="padding:' + d(14) + ' ' + d(12) + ';">';
+      bodyHTML += '<div class="step-num">' + esc(step.number || String(idx + 1).padStart(2, '0')) + '</div>';
+      bodyHTML += '<h3>' + esc(step.title) + '</h3>';
+      if (step.detail) bodyHTML += '<p>' + esc(step.detail) + '</p>';
+      bodyHTML += '</div>';
+    });
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderFullBleed(slide) {
+    var c = slide.content;
+    var html = '<div class="slide full-bleed-slide">';
+    if (c.image) html += '<img class="fb-img" src="' + esc(c.image) + '" alt="">';
+    html += '<div class="fb-content">';
+    if (c.heading) html += '<h2>' + esc(c.heading) + '</h2>';
+    if (c.description) html += '<p>' + esc(c.description) + '</p>';
+    html += '</div></div>';
+    return html;
+  }
+
+  function renderHeroStat(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="big">' + esc(c.number) + '</div>';
+    if (c.context) bodyHTML += '<div class="ctx">' + esc(c.context) + '</div>';
+    if (c.delta) bodyHTML += '<div class="delta">' + esc(c.delta) + '</div>';
+    return wrap5(slide, bodyHTML, 'hero-stat-body');
+  }
+
+  function renderTimeline(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="timeline">';
+    bodyHTML += '<div class="tl-line"></div>';
+    c.nodes.forEach(function(node) {
+      var cls = node.active ? 'tl-node active' : 'tl-node';
+      bodyHTML += '<div class="' + cls + '">';
+      bodyHTML += '<div class="tl-dot"></div>';
+      bodyHTML += '<div class="tl-year">' + esc(node.year) + '</div>';
+      bodyHTML += '<div class="tl-title">' + esc(node.title) + '</div>';
+      if (node.detail) bodyHTML += '<div class="tl-desc">' + esc(node.detail) + '</div>';
+      bodyHTML += '</div>';
+    });
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderBeforeAfter(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="ba-grid" style="gap:' + d(24) + ';">';
+
+    // Before panel
+    bodyHTML += '<div class="ba-panel before" style="padding:' + d(32) + ' ' + d(28) + ';">';
+    bodyHTML += '<div class="ba-label">' + esc(c.before.label) + '</div>';
+    bodyHTML += '<div class="ba-stat">' + esc(c.before.stat) + '</div>';
+    if (c.before.items && c.before.items.length) {
+      bodyHTML += '<ul>';
+      c.before.items.forEach(function(item) { bodyHTML += '<li>' + esc(item) + '</li>'; });
+      bodyHTML += '</ul>';
+    }
+    bodyHTML += '</div>';
+
+    // After panel
+    bodyHTML += '<div class="ba-panel after" style="padding:' + d(32) + ' ' + d(28) + ';">';
+    bodyHTML += '<div class="ba-label">' + esc(c.after.label) + '</div>';
+    bodyHTML += '<div class="ba-stat">' + esc(c.after.stat) + '</div>';
+    if (c.after.items && c.after.items.length) {
+      bodyHTML += '<ul>';
+      c.after.items.forEach(function(item) { bodyHTML += '<li>' + esc(item) + '</li>'; });
+      bodyHTML += '</ul>';
+    }
+    bodyHTML += '</div>';
+
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderMatrix(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="matrix-wrap">';
+    if (c.xLabel) bodyHTML += '<div class="matrix-x-label">' + esc(c.xLabel) + '</div>';
+    bodyHTML += '<div class="matrix-axes">';
+    if (c.yLabel) bodyHTML += '<div class="matrix-y-label">' + esc(c.yLabel) + '</div>';
+    bodyHTML += '<div class="matrix">';
+    c.quadrants.forEach(function(q) {
+      var cls = q.highlight ? 'matrix-q highlight' : 'matrix-q';
+      bodyHTML += '<div class="' + cls + '">';
+      bodyHTML += '<h4>' + esc(q.heading) + '</h4>';
+      if (q.items && q.items.length) {
+        bodyHTML += '<ul>';
+        q.items.forEach(function(item) { bodyHTML += '<li>' + esc(item) + '</li>'; });
+        bodyHTML += '</ul>';
+      }
+      bodyHTML += '</div>';
+    });
+    bodyHTML += '</div></div></div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderThreeColumn(slide) {
+    var c = slide.content;
+    var bodyHTML = '<div class="g1x3" style="gap:' + d(16) + ';">';
+    c.columns.forEach(function(col) {
+      var cls = col.recommended ? 'col-card recommended' : 'col-card';
+      bodyHTML += '<div class="' + cls + '" style="padding:' + d(28) + ' ' + d(20) + ';">';
+      bodyHTML += '<h3>' + esc(col.heading) + '</h3>';
+      if (col.items && col.items.length) {
+        bodyHTML += '<ul>';
+        col.items.forEach(function(item) { bodyHTML += '<li>' + esc(item) + '</li>'; });
+        bodyHTML += '</ul>';
+      }
+      if (col.stat) bodyHTML += '<div class="col-stat">' + esc(col.stat) + '</div>';
+      bodyHTML += '</div>';
+    });
+    bodyHTML += '</div>';
+    return wrap5(slide, bodyHTML, 'body-center');
+  }
+
+  function renderError(msg, idx) {
+    return '<div class="slide slide-error"><div class="err-msg">Slide ' + (idx + 1) + ': ' + esc(msg) + '</div></div>';
+  }
+
+  // --- Master render ---
+  function renderSlide(slide, idx) {
+    var warnings = validate(slide, idx);
+    if (!slide.content) return renderError('Missing content', idx);
+    if (VALID_TYPES.indexOf(slide.type) === -1) return renderError('Unknown type: ' + slide.type, idx);
+
+    switch (slide.type) {
+      case 'title': return renderTitle(slide);
+      case 'divider': return renderDivider(slide);
+      case 'content': return renderContent(slide);
+      case 'split': return renderSplit(slide);
+      case 'dashboard': return renderDashboard(slide);
+      case 'table': return renderTable(slide);
+      case 'code': return renderCode(slide);
+      case 'quote': return renderQuote(slide);
+      case 'diagram': return renderDiagram(slide);
+      case 'full-bleed': return renderFullBleed(slide);
+      case 'hero-stat': return renderHeroStat(slide);
+      case 'timeline': return renderTimeline(slide);
+      case 'before-after': return renderBeforeAfter(slide);
+      case 'matrix': return renderMatrix(slide);
+      case 'three-column': return renderThreeColumn(slide);
+      default: return renderError('Unhandled type: ' + slide.type, idx);
+    }
+  }
+
+  // --- Build all slides ---
+  var container = document.createElement('div');
+  container.id = 'slides-container';
+  var allHTML = '';
+  slides.forEach(function(slide, idx) {
+    allHTML += renderSlide(slide, idx);
+  });
+  container.innerHTML = allHTML;
+
+  // Insert before nav
+  var navEl = document.getElementById('nav');
+  document.body.insertBefore(container, navEl);
+
+  // Mark first slide active
+  var slideEls = container.querySelectorAll('.slide');
+  if (slideEls.length > 0) slideEls[0].classList.add('active');
+
+  // --- Navigation ---
+  var current = 0;
+  var total = slideEls.length;
+
+  function show(i) {
+    if (i < 0 || i >= total) return;
+    slideEls[current].classList.remove('active');
+    current = i;
+    slideEls[current].classList.add('active');
+    document.getElementById('counter').textContent =
+      String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  }
+
+  // Update counter for initial state
+  document.getElementById('counter').textContent =
+    '01 / ' + String(total).padStart(2, '0');
+
+  document.getElementById('prev').onclick = function() { show(current - 1); };
+  document.getElementById('next').onclick = function() { show(current + 1); };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'PageDown') {
+      e.preventDefault(); show(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); show(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault(); show(0);
+    } else if (e.key === 'End') {
+      e.preventDefault(); show(total - 1);
+    }
+  });
+
+  // Touch swipe
+  var touchY;
+  document.addEventListener('touchstart', function(e) {
+    touchY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    var diff = touchY - e.changedTouches[0].clientY;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? show(current + 1) : show(current - 1);
+    }
+  });
+
+  // Set document title
+  document.title = meta.title || 'Slides';
+
+})();
+</script>
+
+</body>
+</html>

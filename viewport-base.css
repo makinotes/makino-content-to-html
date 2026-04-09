@@ -1,0 +1,241 @@
+/* === FIXED CARD MODE (slides/deck/poster) === */
+/* No Reveal.js. Pure CSS fixed-size cards. */
+
+/* Body: dark surround */
+body {
+    background: var(--viewport-bg, #1a1a2e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Slide card: 1280x720 default (16:9) */
+.slide {
+    width: 1280px;
+    height: 720px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .25);
+    border-radius: 6px;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+.slide.active {
+    display: flex;
+}
+
+/* Poster card (single, no nav) */
+.poster {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .25);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* === CANVAS SIZES === */
+/* Override .slide width/height per format:
+   slides/deck:   1280 x 720   (16:9)
+   poster-9x16:   1080 x 1920  (9:16)
+   poster-1x1:    1080 x 1080  (1:1)
+   poster-16x9:   1920 x 1080  (16:9)
+*/
+
+/* === 5-LAYER STRUCTURE (slides/deck) === */
+.slide .hdr {
+    padding: 16px 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+.slide .sub {
+    margin: 4px 40px 0;
+    flex-shrink: 0;
+}
+.slide .body {
+    padding: 10px 40px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.slide .ft {
+    padding: 6px 40px 10px;
+    flex-shrink: 0;
+}
+
+/* === POSTER LAYERS === */
+.poster .poster-hdr {
+    padding: 44px 48px 0;
+    flex-shrink: 0;
+}
+.poster .poster-title {
+    padding: 20px 48px 0;
+    flex-shrink: 0;
+}
+.poster .poster-body {
+    padding: 16px 48px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.poster .poster-ft {
+    padding: 16px 48px 36px;
+    flex-shrink: 0;
+}
+
+/* === TYPOGRAPHY: PRESENTATION SCALE (slides) === */
+/* NOT web scale. PPT standard: body 18px+, title 36px. See slide-types.md for rationale. */
+.slide .hdr h2    { font-size: 36px; font-weight: 800; line-height: 1.2; }
+.slide .hdr .page { font-size: 12px; font-weight: 600; letter-spacing: 1px; }
+.slide .sub       { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+.slide .body li   { font-size: 18px; line-height: 1.8; margin-bottom: 10px; }
+.slide .body p    { font-size: 18px; line-height: 1.8; }
+.slide .ft        { font-size: 11px; letter-spacing: .3px; text-align: center; }
+
+/* === SECTION LABEL (no emoji) === */
+.sub::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+/* === TITLE/DIVIDER SLIDE (centered, no 5-layer) === */
+.slide.title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 36px;
+}
+
+/* === ATMOSPHERE (::after pseudo, z-index 0) === */
+.slide::after,
+.poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: inherit;
+}
+.slide > *,
+.poster > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* === NAV (fixed bottom center) === */
+#nav {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 100;
+}
+#nav button {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    color: #555;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .15s;
+}
+#nav button:hover {
+    color: #999;
+    background: rgba(255, 255, 255, 0.06);
+}
+#counter {
+    font-size: 10px;
+    min-width: 50px;
+    text-align: center;
+    color: #555;
+}
+
+/* === PAGE MODE: SCROLL-BASED === */
+body.page-mode {
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    line-height: 1.8;
+    min-height: auto;
+}
+
+body.page-mode .article-body {
+    max-width: min(90vw, 720px);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Page typography (clamp) */
+body.page-mode h1 { font-size: clamp(1.75rem, 5vw, 3rem); }
+body.page-mode h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); }
+body.page-mode h3 { font-size: clamp(1.1875rem, 2.5vw, 1.375rem); }
+body.page-mode p,
+body.page-mode li { font-size: clamp(0.9375rem, 1.5vw, 1.0625rem); }
+
+/* Page TOC sidebar (desktop) */
+@media (min-width: 1200px) {
+    body.page-mode .page-layout {
+        display: flex;
+        gap: 40px;
+        max-width: min(90vw, 1100px);
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+    body.page-mode .toc-sidebar {
+        flex: 0 0 220px;
+        position: sticky;
+        top: 32px;
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+    }
+    body.page-mode .page-layout .article-body {
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/* === SHARED: REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* === SHARED: PRINT === */
+@media print {
+    #nav { display: none !important; }
+    .slide {
+        position: relative !important;
+        display: flex !important;
+        page-break-after: always;
+        transform: none;
+        top: auto;
+        left: auto;
+        margin: 20px auto;
+    }
+}
