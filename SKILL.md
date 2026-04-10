@@ -2,8 +2,8 @@
 name: content-to-html
 invocation: user
 description: "Content to HTML — 文章转 HTML 页面、slides、deck 或海报。6 种输出格式，8 种风格预设，1280x720 固定画布。"
-version: "4.1"
-last_updated: "2026-04-09"
+version: "4.2"
+last_updated: "2026-04-10"
 ---
 
 # Content to HTML — 6 种格式，统一入口

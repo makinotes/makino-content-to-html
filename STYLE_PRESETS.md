@@ -1,6 +1,10 @@
-# Style Presets Reference — v3.2
+# Style Presets Reference — v3.3
 
 8 refined presets for slides/deck mode. Each preset is a complete design system: CSS variables + font pair + background atmosphere + 4-level depth + dark/light.
+
+**设计参考**：Apple Keynote, Stripe, Linear, Vercel/Next.js Conf, Figma Config, Material Design 暗色规范, Garr Reynolds (Presentation Zen), Cole Nussbaumer Knaflic (Storytelling with Data)
+
+**v3.3 校准**：body font 等宽→无衬线（等宽仅用于代码/数据），暗色 accent 降饱和 30-40%（Material 规范），文字 opacity 三级体系
 
 ---
 
@@ -9,9 +13,10 @@
 ### 1. Midnight Editorial
 
 **Vibe:** Elegant editorial, deep navy, serif sophistication
+**Ref:** Apple Keynote (serif title + sans body), NYT editorial dark mode
 
 **Display font:** Instrument Serif (700)
-**Body font:** JetBrains Mono (400)
+**Body font:** DM Sans (400/500)
 **Font source:** Google Fonts
 
 **Colors:**
@@ -21,9 +26,9 @@
     --surface: #162040;
     --surface-elevated: #243362;
     --text: #e8e4d8;
-    --text-dim: #9a9484;
-    --accent: #d4a73a;
-    --accent-dim: rgba(212,167,58,0.1);
+    --text-dim: rgba(255,255,255,0.60);
+    --accent: #c9a54e;
+    --accent-dim: rgba(201,165,78,0.1);
     --border: rgba(200,180,140,0.08);
     --viewport-bg: #080d1a;
 }
@@ -41,10 +46,12 @@
 
 ### 2. Terminal Mono
 
-**Vibe:** Hacker aesthetic, monospace everything, green-on-dark
+**Vibe:** Vercel-inspired precision, monospace titles, clean dark
+**Ref:** Vercel/Next.js Conf (Geist 字体系统, 纯黑底+排版精度出科技感)
 
-**Display/Body font:** Geist Mono or JetBrains Mono (all weights)
-**Font source:** Google Fonts (JetBrains Mono) or Fontshare (Geist Mono)
+**Display font:** Geist Mono or JetBrains Mono (700)
+**Body font:** Geist Sans or Inter (400/500)
+**Font source:** Google Fonts (JetBrains Mono / Inter) or Fontshare (Geist)
 
 **Colors:**
 ```css
@@ -52,16 +59,16 @@
     --bg: #0a0e14;
     --surface: #12161e;
     --surface-elevated: #1a1f2a;
-    --text: #c8d6e5;
-    --text-dim: #5a6a7a;
-    --accent: #50fa7b;
-    --accent-dim: rgba(80,250,123,0.08);
-    --border: rgba(80,250,123,0.06);
+    --text: rgba(255,255,255,0.87);
+    --text-dim: rgba(255,255,255,0.50);
+    --accent: #6ee7a0;
+    --accent-dim: rgba(110,231,160,0.08);
+    --border: rgba(110,231,160,0.06);
     --viewport-bg: #000000;
 }
 ```
 
-**Background atmosphere:** Scan lines (repeating-linear-gradient 2px) + dot grid
+**Background atmosphere:** Subtle dot grid only (no scan lines — Tufte: minimize non-data ink)
 
 **Depth system:**
 - Hero: accent border-top + slight glow
@@ -74,6 +81,7 @@
 ### 3. Bold Signal
 
 **Vibe:** High-impact, confident, orange focal card on dark
+**Ref:** Stripe (渐变做情绪不做装饰), Apple (数字放大做视觉锤)
 
 **Display font:** Archivo Black (900)
 **Body font:** Space Grotesk (400/500)
@@ -85,10 +93,10 @@
     --bg: #1a1a1a;
     --surface: #2d2d2d;
     --surface-elevated: #3a3a3a;
-    --text: #ffffff;
-    --text-dim: #999999;
-    --accent: #FF5722;
-    --accent-dim: rgba(255,87,34,0.1);
+    --text: rgba(255,255,255,0.87);
+    --text-dim: rgba(255,255,255,0.60);
+    --accent: #e8744a;
+    --accent-dim: rgba(232,116,74,0.1);
     --border: rgba(255,255,255,0.08);
     --viewport-bg: #0d0d0d;
 }
@@ -109,6 +117,7 @@
 ### 4. Neon Cyber
 
 **Vibe:** Futuristic, techy, confident, cyan+magenta neon
+**Ref:** Stripe (渐变只用在 Hero 区域做视觉焦点, 数据区回归纯净)
 
 **Display font:** Clash Display (700)
 **Body font:** Satoshi (400/500)
@@ -120,17 +129,17 @@
     --bg: #0a0f1c;
     --surface: #111827;
     --surface-elevated: #1e293b;
-    --text: #e0e8f0;
-    --text-dim: #7a8ba0;
-    --accent: #00ffcc;
-    --accent-secondary: #ff00aa;
-    --accent-dim: rgba(0,255,204,0.08);
-    --border: rgba(0,255,204,0.06);
+    --text: rgba(255,255,255,0.87);
+    --text-dim: rgba(255,255,255,0.55);
+    --accent: #5cf5d4;
+    --accent-secondary: #f472b6;
+    --accent-dim: rgba(92,245,212,0.08);
+    --border: rgba(92,245,212,0.06);
     --viewport-bg: #050810;
 }
 ```
 
-**Background atmosphere:** Gradient mesh (two radial gradients: cyan top-right + magenta bottom-left) + subtle grid
+**Background atmosphere:** Gradient mesh only (two radial: cyan top-right + magenta bottom-left). No grid overlay — keep clean.
 
 **Depth system:**
 - Hero: neon glow shadow
@@ -145,10 +154,11 @@
 ### 5. Warm Signal
 
 **Vibe:** Cream paper, warm editorial, brick-red accent
+**Ref:** Linear (精密排版+高信息密度但不拥挤), Garr Reynolds (留白是设计元素)
 
 **Display font:** Plus Jakarta Sans (700/800)
-**Body font:** Azeret Mono (400)
-**Font source:** Google Fonts + Fontshare
+**Body font:** Work Sans (400/500)
+**Font source:** Google Fonts
 
 **Colors:**
 ```css
@@ -182,9 +192,10 @@
 ### 6. Swiss Clean
 
 **Vibe:** Precise, Bauhaus-inspired, single blue accent
+**Ref:** Linear (极简+微妙层级系统), Swiss International Style (Helvetica 传统)
 
 **Display font:** DM Sans (700/800)
-**Body font:** Fira Code (400)
+**Body font:** Inter (400/500)
 **Font source:** Google Fonts
 
 **Colors:**
@@ -221,6 +232,7 @@
 ### 7. Dark Botanical
 
 **Vibe:** Elegant, sophisticated, warm gold/pink on black
+**Ref:** 高端品牌/奢侈品调性，适合年度总结、品牌故事类演示
 
 **Display font:** Cormorant (400/600)
 **Body font:** IBM Plex Sans (300/400)
@@ -251,6 +263,7 @@
 ### 8. Notebook Tabs
 
 **Vibe:** Editorial, organized, tactile paper feeling
+**Ref:** Moleskine/实体笔记本质感，Figma Config (形状驱动的视觉语言)
 
 **Display font:** Bodoni Moda (400/700)
 **Body font:** DM Sans (400/500)
@@ -280,6 +293,34 @@
 ---
 
 ## Shared Rules
+
+### Text Opacity 三级体系（from Material Design 暗色规范）
+
+暗色主题中文字靠 opacity 区分层级，不用独立 hex 值：
+
+```css
+--text: rgba(255,255,255,0.87);       /* 主文字 — 标题、正文 */
+--text-dim: rgba(255,255,255,0.60);   /* 次文字 — 说明、标签 */
+--text-disabled: rgba(255,255,255,0.38); /* 禁用/最弱 — footer、占位 */
+```
+
+亮色主题同理：`rgba(0,0,0, 0.87/0.60/0.38)`。
+
+**为什么不用 hex**：opacity 体系自动适配任何底色，换主题不用改文字色。Linear 和 Material Design 都用这套。
+
+### Accent 色降饱和规则（from Material Design + Stripe）
+
+暗色背景上高饱和色会"震动"（视觉疲劳）。accent 色必须降饱和：
+
+```css
+/* 原始品牌色 → 暗色适配色 */
+#FF5722 → #e8744a  /* Bold Signal: 橙 */
+#50fa7b → #6ee7a0  /* Terminal: 绿 */
+#00ffcc → #5cf5d4  /* Neon: 青 */
+#ff00aa → #f472b6  /* Neon: 粉 */
+```
+
+**方法**：HSL 中 S 降 30-40%，L 提 10-15%。或用 `color-mix(in srgb, 品牌色 60%, white 40%)`。
 
 ### Card Anti-Float 背景差异（from 专业 PPT 工具调研 v3.8）
 
@@ -314,21 +355,25 @@ accent 色是稀缺资源，不是装饰。严格限制使用场景：
 
 ### Font Pairing Pool (13 pairs, rotate across generations)
 
-| # | Display | Body | Mood |
-|---|---------|------|------|
-| 1 | Instrument Serif | JetBrains Mono | Editorial dark |
-| 2 | Geist Mono | Geist Mono | Hacker mono |
-| 3 | Archivo Black | Space Grotesk | Bold impact |
-| 4 | Clash Display | Satoshi | Futuristic |
-| 5 | Plus Jakarta Sans | Azeret Mono | Warm editorial |
-| 6 | DM Sans | Fira Code | Swiss precise |
-| 7 | Cormorant | IBM Plex Sans | Elegant serif |
-| 8 | Bodoni Moda | DM Sans | Notebook classic |
-| 9 | Fraunces | Work Sans | Vintage editorial |
-| 10 | Syne | Space Mono | Creative voltage |
-| 11 | Manrope | Manrope | Clean professional |
-| 12 | Outfit | Outfit | Playful modern |
-| 13 | Cormorant Garamond | Source Serif 4 | Literary |
+**规则**：Body font 必须是无衬线/衬线正文体。等宽字体仅用于代码块和数据表格（`--font-mono`），不做正文。
+
+| # | Display | Body | Code (optional) | Mood |
+|---|---------|------|-----------------|------|
+| 1 | Instrument Serif | DM Sans | JetBrains Mono | Editorial dark |
+| 2 | Geist Mono | Inter | Geist Mono | Vercel precision |
+| 3 | Archivo Black | Space Grotesk | — | Bold impact |
+| 4 | Clash Display | Satoshi | — | Futuristic |
+| 5 | Plus Jakarta Sans | Work Sans | Azeret Mono | Warm editorial |
+| 6 | DM Sans | Inter | Fira Code | Swiss precise |
+| 7 | Cormorant | IBM Plex Sans | — | Elegant serif |
+| 8 | Bodoni Moda | DM Sans | — | Notebook classic |
+| 9 | Fraunces | Work Sans | — | Vintage editorial |
+| 10 | Syne | Space Grotesk | Space Mono | Creative voltage |
+| 11 | Manrope | Manrope | — | Clean professional |
+| 12 | Outfit | Outfit | — | Playful modern |
+| 13 | Cormorant Garamond | Source Serif 4 | — | Literary |
+
+**Display 用等宽的例外**：#2 (Geist Mono) 和 #10 (Syne+Space Mono) 的标题用等宽是有意为之（科技/创意场景），但 body 仍然是无衬线。
 
 ### Background Atmosphere (4 patterns)
 
@@ -393,13 +438,13 @@ background:
 
 ## DO NOT USE
 
-**Fonts:** Inter, Roboto, Arial, system fonts as display
+**Fonts:** Inter, Roboto, Arial, system fonts as display. 等宽字体做正文 body（仅标题可用等宽）
 
-**Colors:** `#6366f1` (generic indigo), purple gradients on white
+**Colors:** `#6366f1` (generic indigo), purple gradients on white, 暗底上纯白 `#FFFFFF` 做正文（用 `rgba(255,255,255,0.87)` 替代, Material Design 规范）, 高饱和 accent 未降饱和直接用于暗底
 
-**Layouts:** Everything centered uniform, identical card grids
+**Layouts:** Everything centered uniform, identical card grids, 一页塞 3+ 个信息点（Garr Reynolds: 一页一想法）
 
-**Decorations:** Emoji icons, gratuitous glassmorphism, glow animations
+**Decorations:** Emoji icons, gratuitous glassmorphism, glow animations, scan lines / decorative grids（Tufte: minimize non-data ink）
 
 ---
 
