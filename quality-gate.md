@@ -207,10 +207,13 @@ Replace your fonts with Arial. Replace your colors with gray. If nobody can tell
 - [ ] Keyboard navigation works (arrows, space, Home, End)
 - [ ] Touch swipe works
 - [ ] Slide counter visible and accurate
-- [ ] `?export` mode: all slides visible, no animations
+- [ ] `?export` mode: all slides visible, expand content visible, no animations
 - [ ] No slide content overflows (scrollHeight <= clientHeight)
 - [ ] Narrative coherent, sources cited (deck only)
 - [ ] Entry animations fire on slide transition (CSS, not Reveal.js fragments)
+- [ ] Interactive: expand items don't overflow slide when opened (v4.1)
+- [ ] Interactive: number animations respect `prefers-reduced-motion` (v4.1)
+- [ ] Interactive: core assertion visible without clicking — expand is supplementary only (v4.1)
 
 ### Per-Generation Variety
 Track what was used last time. This time MUST differ:

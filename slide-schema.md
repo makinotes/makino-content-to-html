@@ -80,12 +80,14 @@ sub-agent 输出 JSON，渲染引擎输出 HTML。设计规则全锁在渲染引
 {
   "items": [
     { "heading": "Core assertion", "detail": "Supporting detail 1 line" },
-    { "heading": "Second point", "detail": "Detail text" }
+    { "heading": "Second point", "detail": "Detail text", "expand": "Additional context revealed on click (v4.1)" }
   ]
 }
 ```
 
 items 长度 3-6。每条必须有 heading + detail（anti-bullet-list 规则）。
+
+**v4.1 交互字段**：`expand`（可选 string）— 点击该 item 展开的额外文本。不设则无交互。export 模式自动展开。
 
 ### type: "split"
 
@@ -123,6 +125,8 @@ variant: "text" | "image" | "card"。image 时用 image+caption 字段。
 ```
 
 cards 长度 3-6。accent: true 的卡片用 accent 色高亮（最多 1 张）。
+
+**v4.1 交互字段**：`animate`（可选 boolean，默认 true）— 数字值在 slide 出现时从 0 滚动到目标值。值不含可提取数字时自动跳过。设为 `false` 显式禁用。Hero Stat 同理。
 
 ### type: "table"
 
