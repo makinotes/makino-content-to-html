@@ -1,10 +1,10 @@
-# Style Presets Reference — v3.3
+# Style Presets Reference — v4.2
 
 8 refined presets for slides/deck mode. Each preset is a complete design system: CSS variables + font pair + background atmosphere + 4-level depth + dark/light.
 
 **设计参考**：Apple Keynote, Stripe, Linear, Vercel/Next.js Conf, Figma Config, Material Design 暗色规范, Garr Reynolds (Presentation Zen), Cole Nussbaumer Knaflic (Storytelling with Data)
 
-**v3.3 校准**：body font 等宽→无衬线（等宽仅用于代码/数据），暗色 accent 降饱和 30-40%（Material 规范），文字 opacity 三级体系
+**v4.2 校准**：body font 等宽→无衬线（等宽仅用于代码/数据，通过 `--font-mono` 变量注入），暗色 accent 降饱和 30-40%（Material 规范），文字 opacity 三级体系
 
 ---
 

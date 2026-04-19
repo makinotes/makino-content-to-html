@@ -14,7 +14,8 @@
   --text: #e8e4d8; --dim: #9a9484; --accent: #d4a73a;
   --accent-dim: rgba(212,167,58,0.1); --accent-rgb: 212,167,58;
   --bdr: rgba(200,180,140,0.08); --viewport-bg: #080d1a;
-  --font-display: 'Instrument Serif', serif; --font-body: 'JetBrains Mono', monospace;
+  --font-display: 'Instrument Serif', serif; --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 .preset-midnight-editorial .slide::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
@@ -27,7 +28,8 @@
   --text: #c8d6e5; --dim: #5a6a7a; --accent: #50fa7b;
   --accent-dim: rgba(80,250,123,0.08); --accent-rgb: 80,250,123;
   --bdr: rgba(80,250,123,0.06); --viewport-bg: #000000;
-  --font-display: 'JetBrains Mono', monospace; --font-body: 'JetBrains Mono', monospace;
+  --font-display: 'JetBrains Mono', monospace; --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 .preset-terminal-mono .slide::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
@@ -70,7 +72,8 @@
   --text: #2c2a25; --dim: #7c756a; --accent: #c2410c;
   --accent-dim: rgba(194,65,12,0.08); --accent-rgb: 194,65,12;
   --bdr: rgba(0,0,0,0.06); --viewport-bg: #1a1a1a;
-  --font-display: 'Plus Jakarta Sans', sans-serif; --font-body: 'Azeret Mono', monospace;
+  --font-display: 'Plus Jakarta Sans', sans-serif; --font-body: 'Work Sans', sans-serif;
+  --font-mono: 'Azeret Mono', monospace;
 }
 .preset-warm-signal .slide::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
@@ -83,7 +86,8 @@
   --text: #111111; --dim: #666666; --accent: #0055ff;
   --accent-dim: rgba(0,85,255,0.06); --accent-rgb: 0,85,255;
   --bdr: rgba(0,0,0,0.06); --viewport-bg: #1a1a1a;
-  --font-display: 'DM Sans', sans-serif; --font-body: 'Fira Code', monospace;
+  --font-display: 'DM Sans', sans-serif; --font-body: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
 .preset-swiss-clean .slide::after { content: none; }
 
@@ -607,7 +611,7 @@ body.export-mode .ni-toggle { display: none; }
     "density": 1.0,
     "fonts": {
       "display": "Instrument Serif",
-      "body": "JetBrains Mono"
+      "body": "DM Sans"
     }
   },
   "slides": [
@@ -890,7 +894,8 @@ body.export-mode .ni-toggle { display: none; }
     var bodyHTML = '<div class="' + gridClass + '" style="gap:' + d(10) + ';">';
     c.cards.forEach(function(card) {
       var cls = card.accent ? 'card card-accent' : 'card';
-      bodyHTML += '<div class="' + cls + '" style="padding:' + d(24) + ' ' + d(20) + ';">';
+      var animAttr = card.animate === false ? ' data-animate="false"' : '';
+      bodyHTML += '<div class="' + cls + '"' + animAttr + ' style="padding:' + d(24) + ' ' + d(20) + ';">';
       bodyHTML += '<div class="kpi-val">' + esc(card.value) + '</div>';
       bodyHTML += '<div class="kpi-label">' + esc(card.label) + '</div>';
       bodyHTML += '</div>';
@@ -971,7 +976,8 @@ body.export-mode .ni-toggle { display: none; }
 
   function renderHeroStat(slide) {
     var c = slide.content;
-    var bodyHTML = '<div class="big">' + esc(c.number) + '</div>';
+    var animAttr = c.animate === false ? ' data-animate="false"' : '';
+    var bodyHTML = '<div class="big"' + animAttr + '>' + esc(c.number) + '</div>';
     if (c.context) bodyHTML += '<div class="ctx">' + esc(c.context) + '</div>';
     if (c.delta) bodyHTML += '<div class="delta">' + esc(c.delta) + '</div>';
     return wrap5(slide, bodyHTML, 'hero-stat-body');
@@ -1144,16 +1150,19 @@ body.export-mode .ni-toggle { display: none; }
     }
   });
 
-  // Touch swipe
-  var touchY;
+  // Touch swipe — handle both axes, pick the stronger one
+  var touchX, touchY;
   document.addEventListener('touchstart', function(e) {
+    touchX = e.touches[0].clientX;
     touchY = e.touches[0].clientY;
   }, { passive: true });
   document.addEventListener('touchend', function(e) {
-    var diff = touchY - e.changedTouches[0].clientY;
-    if (Math.abs(diff) > 50) {
-      diff > 0 ? show(current + 1) : show(current - 1);
-    }
+    var dx = touchX - e.changedTouches[0].clientX;
+    var dy = touchY - e.changedTouches[0].clientY;
+    var absX = Math.abs(dx), absY = Math.abs(dy);
+    if (Math.max(absX, absY) < 50) return;
+    var diff = absX > absY ? dx : dy;
+    diff > 0 ? show(current + 1) : show(current - 1);
   });
 
   // Set document title

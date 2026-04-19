@@ -60,10 +60,10 @@ SKILL.md                  ← Entry point: phase flow + commands
 
 ## Version
 
-v4.0 (2026-04-09) — JSON→Engine architecture, density coefficient, 15 slide types, 8 presets.
+v4.2 (2026-04-19) — Style preset calibration (Apple/Stripe/Linear/Vercel/Material refs), body font mono→sans, desaturated accents. Earlier: v4.1 slide interactions (click-to-reveal, number rolling), v4.0 JSON→Engine architecture + density coefficient + 15 slide types + 8 presets.
 
 ## Credits
 
 Page design: [ship-page-skill](https://github.com/Zooeyii/ship-page-skill), [visual-explainer](https://github.com/nicobailon/visual-explainer)
 Slides layout: [makino-data-slides](https://github.com/makinotes/makino-data-slides), [revealjs-skill](https://github.com/ryanbbrown/revealjs-skill)
-Style system: [zara-frontend-slides](https://github.com/anthropics/zara-frontend-slides) (MIT)
+Style system: zara-frontend-slides by zarazhangrui (MIT)

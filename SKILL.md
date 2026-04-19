@@ -81,7 +81,7 @@ last_updated: "2026-04-19"
 | `html-template.md` | slides/deck/poster HTML 架构 |
 | `animation-patterns.md` | 动画分角色系统 |
 | `slide-schema.md` | **JSON Schema for 15 slide types（代码即策略的数据契约）** |
-| `slide-engine.html` | **JSON→HTML 渲染引擎（self-contained，8 预设 + 15 type + nav + 验证 + 交互 v4.1）** |
+| `slide-engine.html` | **JSON→HTML 渲染引擎（self-contained，8 预设 + 15 type + nav + 验证 + 交互）** |
 | `quality-gate.md` | 三层质量控制 |
 | `mermaid-guide.md` | Mermaid 集成 + 7 坑指南 |
 
@@ -334,5 +334,5 @@ Earlier versions: see git log.
 # Credits
 
 Page design: [ship-page-skill](https://github.com/Zooeyii/ship-page-skill), [visual-explainer](https://github.com/nicobailon/visual-explainer), [visualize](https://github.com/careerhackeralex/visualize)
-Slides layout: [makino-data-slides](data-slides spacing rules), [revealjs-skill](https://github.com/ryanbbrown/revealjs-skill)
-Style system: [ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill), [zara-frontend-slides](https://github.com/anthropics/zara-frontend-slides) (MIT)
+Slides layout: [makino-data-slides](https://github.com/makinotes/makino-data-slides) (spacing rules), [revealjs-skill](https://github.com/ryanbbrown/revealjs-skill)
+Style system: [ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill), zara-frontend-slides by zarazhangrui (MIT)
