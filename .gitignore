@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary outputs
+*.tmp
+*.log
+/tmp/
+output/
+generated/
+
+# OS / shell
+*.bak
