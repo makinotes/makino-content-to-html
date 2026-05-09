@@ -49,6 +49,15 @@ SKILL.md                  ← Entry point: phase flow + commands
 - **Extraction Plan Table**: User reviews and approves content mapping before generation
 - **Card Anti-Float**: `color-mix(in srgb, var(--bg) 92%, var(--text) 8%)` prevents floating cards
 
+## Install
+
+```bash
+cd ~/.claude/skills/
+git clone https://github.com/makinotes/makino-content-to-html.git content-to-html
+```
+
+Then type `/content-to-html` in Claude Code.
+
 ## Usage
 
 ```
@@ -67,3 +76,7 @@ v4.2 (2026-04-19) — Style preset calibration (Apple/Stripe/Linear/Vercel/Mater
 Page design: [ship-page-skill](https://github.com/Zooeyii/ship-page-skill), [visual-explainer](https://github.com/nicobailon/visual-explainer)
 Slides layout: [makino-data-slides](https://github.com/makinotes/makino-data-slides), [revealjs-skill](https://github.com/ryanbbrown/revealjs-skill)
 Style system: zara-frontend-slides by zarazhangrui (MIT)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
