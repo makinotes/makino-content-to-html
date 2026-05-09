@@ -2,6 +2,14 @@
 
 Turn long-form articles into slides, pages, decks, and posters. A Claude Code skill with 6 output formats, 15 slide types, 8 style presets, and a JSON-driven rendering engine.
 
+## Why this exists
+
+Claude Code can write HTML directly — so why a skill?
+
+Because consistent, design-grade output is hard to get from "make me a slide" prompts. You end up re-tweaking the same things every time: spacing, font hierarchy, slide density, color systems, when to break to a new slide. This skill encodes those decisions — extraction pipeline, slide types, design rules, style presets — so you get a usable result on the first generation.
+
+For Claude Code users who want to turn a long-form article (markdown / draft / notes) into something shareable: a readable web page, a slide deck, or a poster card — without re-prompting layout every time.
+
 ## What It Does
 
 | Format | Canvas | Input | Output |
@@ -12,6 +20,17 @@ Turn long-form articles into slides, pages, decks, and posters. A Claude Code sk
 | **poster-9x16** | 1080x1920 | Article highlights | Vertical poster |
 | **poster-1x1** | 1080x1080 | Core insight | Square social card |
 | **poster-16x9** | 1920x1080 | Article summary | Horizontal share card |
+
+### When to use which
+
+| Goal | Format |
+|------|--------|
+| Long article to read on the web | `page` |
+| Distill into a 10-15 slide presentation | `slides` |
+| Combine multiple articles into a curated narrative | `deck` |
+| Vertical card for social (Xiaohongshu / IG story) | `poster-9x16` |
+| Square card (Twitter / WeChat moments) | `poster-1x1` |
+| Horizontal banner (LinkedIn / blog header) | `poster-16x9` |
 
 ## Architecture
 
@@ -70,6 +89,27 @@ Then type `/content-to-html` in Claude Code.
 ## Version
 
 v4.2 (2026-04-19) — Style preset calibration (Apple/Stripe/Linear/Vercel/Material refs), body font mono→sans, desaturated accents. Earlier: v4.1 slide interactions (click-to-reveal, number rolling), v4.0 JSON→Engine architecture + density coefficient + 15 slide types + 8 presets.
+
+## Known limitations
+
+- 1280x720 fixed canvas — pixel-perfect but not responsive. Mobile-friendly slides aren't a goal.
+- Best on long-form articles (1500+ chars). Shorter pieces feel padded.
+- Style presets are opinionated. Custom brand identity needs editing STYLE_PRESETS.md.
+- Mermaid integration has known gotchas — see mermaid-guide.md.
+- Generation quality depends on the model — works best with Sonnet/Opus, less reliable on Haiku.
+
+## Roadmap
+
+Possible directions if there's interest:
+
+- Web playground for non-Claude-Code users
+- Style preset editor (currently markdown-edit only)
+- Better Chinese typography defaults
+- Export to PDF / PPTX from the rendered HTML
+
+## Contributing
+
+I'm not actively maintaining this — it solved a problem for me and now it's out there. If something is broken or you want a feature, PRs are the fastest path forward. Issues are fine but I may not respond quickly.
 
 ## Credits
 
